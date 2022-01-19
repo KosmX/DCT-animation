@@ -1,4 +1,4 @@
-package dev.kosmx.system_test;
+package dev.kosmx.dctAnim;
 
 import java.util.Arrays;
 

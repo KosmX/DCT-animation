@@ -1,4 +1,4 @@
-package dev.kosmx.system_test
+package dev.kosmx.dctAnim
 
 class Matrix<T>(val width: Int, val height: Int) {
     private val array: MutableList<MutableList<T?>>;
