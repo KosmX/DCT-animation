@@ -5,10 +5,10 @@ import java.io.File
 import javax.imageio.ImageIO
 import kotlin.io.path.Path
 import kotlin.io.path.createDirectory
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.max
-import kotlin.math.min
+import kotlin.math.*
+
+const val quantize = true
+const val divider = 16
 
 fun main() {
     val file: File
@@ -28,13 +28,29 @@ fun main() {
         }
     }
 
+
+
     val res = MDCT2(matrix)
+
+    if (quantize) {
+        for (x in 0 until matrix.width) {
+            for (y in 0 until matrix.height) {
+                val i = (res[x, y] / divider).roundToInt()
+                res[x, y] = i.toDouble() * divider
+            }
+        }
+    }
+
+
     println(res)
 
     val workDir = Path("work")
     if (!workDir.toFile().isDirectory) {
         workDir.createDirectory()
     }
+
+
+
 
     val source = Matrix(res)
 
@@ -46,6 +62,7 @@ fun main() {
 
     var counter = 0
     for (i in zigzag(res.width, res.height)) {
+        if (quantize && res[i] == 0.0) continue
         val tmp = Matrix(res)
         val tmp2 = Matrix(res)
         for (x in 0 until res.width) {
@@ -58,7 +75,7 @@ fun main() {
                         (if (n1 == 0) 0.5 else cos(PI / res.width * (x + .5) * n1))
                 sum *= 4.0 /(res.width * res.height)
                 source[x, y] = source[x, y] + sum
-                tmp[x, y] = sum
+                tmp[x, y] = sum + 127
             }
         }
 
