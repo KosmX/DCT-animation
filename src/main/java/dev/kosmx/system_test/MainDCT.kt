@@ -94,7 +94,7 @@ fun main() {
         val image = BufferedImage(res.width * 3, res.height, BufferedImage.TYPE_3BYTE_BGR)
         for (x in 0 until source.width) {
             for (y in 0 until source.height) {
-                val b: Int = source[x, y].toInt().toByte().toInt()
+                val b: Int = source[x, y].toInt().let { min(255, max(0, it)) }.toByte().toInt()
                 image.setRGB(x, y, b or (b shl 8) or (b shl 16))
             }
         }
